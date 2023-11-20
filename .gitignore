@@ -3,7 +3,4 @@
 /public/assets/cache
 /public/assets/front
 /vendor
-/.env
-/.env.live
 /html
-/.env-live
