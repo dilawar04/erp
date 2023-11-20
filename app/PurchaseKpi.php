@@ -1,0 +1,23 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class PurchaseKpi extends Model
+{
+
+    //protected $table = 'purchase_kpis';
+    //public $timestamps = false;
+    //const CREATED_AT = 'created';
+    //const UPDATED_AT = 'updated';
+    //protected $perPage = 15;
+
+    protected $guarded = [];
+
+ public function oems()
+    {
+        return $this->hasOne('App\oem', 'id', 'oem_id');
+    }
+
+}
