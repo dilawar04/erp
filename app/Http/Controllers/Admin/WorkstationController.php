@@ -131,9 +131,9 @@ class WorkStationController extends Controller
 
         /** -------- Validation */
         $validator_rules = [
-        'code' => "required",
-                'name' => "required",
-                ];
+            'code' => "required",
+            'name' => "required",
+        ];
         $validator = \Validator::make(request()->all(), $validator_rules);
         if ($validator->fails()) {
             if (request()->ajax() || request()->is('api/*')) {
@@ -154,15 +154,34 @@ class WorkStationController extends Controller
                 }
             }
         }
-
         if ($id > 0) {
             $row = $this->model->find($id);
-            $row = $row->fill($data['data']);
+            
+            $codeArray = json_decode($data['data']['code'], true);
+            $nameArray = json_decode($data['data']['name'], true);
+            $row->code = $codeArray[0];
+            $row->name = $nameArray[0];
+            $row->save();
         } else {
-            $row = $this->model->fill($data['data']);
+
+            $rowData = $data['data'];
+            // Decode JSON strings into arrays
+            $codeArray = json_decode($rowData['code'], true);
+            $nameArray = json_decode($rowData['name'], true);
+
+            // Create new model instance
+            $row = new WorkStation(); // Replace YourModel with your model class name
+
+            // Loop through the arrays and save each element to the respective columns
+            foreach ($codeArray as $key => $code) {
+                $row->create([
+                    'code' => $code,
+                    'name' => $nameArray[$key] // Make sure indices match between code and name arrays
+                ]);
+            }
         }
 
-        if ($status = $row->save()) {
+        if ($status = 'true') {
             if($id == 0){
                 $id = $row->{$this->id_key};
                 set_notification('Record has been inserted!', 'success');
