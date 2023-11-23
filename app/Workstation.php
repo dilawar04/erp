@@ -15,10 +15,4 @@ class WorkStation extends Model
 
     protected $guarded = [];
 
-
-    public function workstation_categories()
-    {
-        return $this->hasOne('App\workstation_category', 'id', 'category_id');
-    }
-
 }

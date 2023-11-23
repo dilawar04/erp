@@ -1,30 +1,14 @@
 @php
-    $status_column_data = DB_enumValues('work_stations', 'status');
+    $status_column_data = DB_enumValues('workstation_categories', 'status');
     $bulk_update['status'] = ['title' => 'Status', 'data' => $status_column_data];
     $form_buttons = ['new', 'delete', 'import', 'export'];
 @endphp
 @extends('admin.layouts.admin')
 
 @section('content')
-    <style>
-        .work-station-ul {
-            list-style: none;
-            display: contents;
-        }
 
-        .work-station-li {
-            float: left;
-            background: #6969d0;
-            padding: 4px;
-            margin: 3px;
-            color: white;
-            border-radius: 5px;
-            font-size: 13px;
-        }
-
-    </style>
-
-    <form action="{{ admin_url('', true) }}" method="get" enctype="multipart/form-data" id="work_stations-form">
+    <form action="{{ admin_url('', true) }}" method="get" enctype="multipart/form-data"
+          id="workstation_categories-form">
         @csrf
         @include('admin.layouts.inc.stickybar', compact('form_buttons'))
         <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
@@ -55,27 +39,6 @@
                                         return $value;
                                     }
                                 ]]);
-                                
-                                $grid->dt_column(['code' => [
-                                    'wrap' => function($value, $field, $_row) use($_this) {
-                                        $HTML = '<ul class="work_station-ul">';
-                                        foreach(json_decode($value) as $item){
-                                            $HTML .= '<li class="work_station-li">'.$item.'</li>';
-                                        }
-                                        $HTML .= '</ul>';
-                                        return $HTML;
-                                    }
-                                ]]);
-                                $grid->dt_column(['name' => [
-                                    'wrap' => function($value, $field, $_row) use($_this) {
-                                        $HTML = '<ul class="work_station-ul">';
-                                        foreach(json_decode($value) as $item){
-                                            $HTML .= '<li class="work_station-li">'.$item.'</li>';
-                                        }
-                                        $HTML .= '</ul>';
-                                        return $HTML;
-                                    }
-                                ]]);
 
                                 $grid->dt_column(['status' => ['overflow' => 'initial', 'align' => 'center', 'th_align' => 'center', 'filter_value' => '=', 'input_options' => ['options' => $grid->status_column_data, 'class' => '', 'onchange' => true],
                                     'wrap' => function($value, $field, $_row, $grid) {
@@ -96,8 +59,7 @@
                                         return _date_format($value, $_row, $field, $grid);
                                     }
                                 ]]);
-
-                                $grid->dt_column(['grid_actions' => ['width' => '150',
+                                                        $grid->dt_column(['grid_actions' => ['width' => '150',
                                     'check_action' => function($_row, $html, $button){
                                         //if($button != 'delete')
                                         {
@@ -127,4 +89,4 @@
 {{-- Scripts --}}
 @section('scripts')
 
-@endsectionv
+@endsection

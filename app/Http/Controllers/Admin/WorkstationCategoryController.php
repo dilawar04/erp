@@ -131,9 +131,9 @@ class WorkstationCategoryController extends Controller
 
         /** -------- Validation */
         $validator_rules = [
-        'title' => "required",
-                'code' => "required",
-                ];
+            'title' => "required|max:255",
+            'code' => "required|max:255",
+        ];
         $validator = \Validator::make(request()->all(), $validator_rules);
         if ($validator->fails()) {
             if (request()->ajax() || request()->is('api/*')) {
