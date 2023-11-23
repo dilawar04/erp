@@ -1,6 +1,6 @@
 <?php
 
-//use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\FullCalenderController;
 
 /*
@@ -51,9 +51,7 @@ Route::post(env('ADMIN_URI') . '/login/do_login', 'Admin\LoginController@do_logi
 Route::get(env('ADMIN_URI') . '/login/logout', 'Admin\LoginController@logout');
 
 Route::middleware(['auth', 'admin'])->prefix(env('ADMIN_URI'))->group( function () {
-    
-    Route::post('full-calender/action', [FullCalendarController::class, 'action']);
-    
+        
     Route::any('/{controller}/{method?}/{params?}',
         function ($controller, $method = 'index', $params = null) {
             $app = app();
@@ -93,9 +91,9 @@ Route::get('/register', 'AuthController@register')->name('register');*/
 //Route::get('/logout', 'AuthController@logout')->name('logout');
 
 
-Route::get('admin.full_calenders', [FullCalenderController::class, 'index'])->name('full_calenders.index');
+// Route::get('admin.full_calenders', [FullCalenderController::class, 'index'])->name('full_calenders.index');
 
-Route::post('admin.full_calenders/action', [FullCalenderController::class, 'action'])->name('full_calenders.action');
+// Route::post('admin.full_calenders/action', [FullCalenderController::class, 'action'])->name('full_calenders.action');
 
 
 
@@ -136,6 +134,13 @@ Route::any('/{controller}/{method?}/{params?}',
         }
     }
 )->where('params', '.*');
+
+
+
+
+Route::get('/admin/full_calenders', [FullCalenderController::class, 'index']);
+
+Route::post('/admin/full_calenders/action', [FullCalenderController::class, 'action']);
 
 
 
