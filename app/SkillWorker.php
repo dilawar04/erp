@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Skill extends Model
+class SkillWorker extends Model
 {
 
-    //protected $table = 'skills';
+    protected $table = 'skill_workers';
     //public $timestamps = false;
     //const CREATED_AT = 'created';
     //const UPDATED_AT = 'updated';

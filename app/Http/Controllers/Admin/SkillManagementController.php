@@ -1,19 +1,19 @@
 <?php
 /**
- * Class Skill
- * @property \App\Skill $model
+ * Class SkillManagement
+ * @property \App\SkillManagement $model
  */
 
 namespace App\Http\Controllers\Admin;
 
-use App\Skill;
+use App\SkillManagement;
 use Breadcrumb;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
-class SkillController extends Controller
+class SkillManagementController extends Controller
 {
     public $module = ''; //Project module name
     public $_info = null; // Project module info
@@ -55,16 +55,12 @@ class SkillController extends Controller
         \Breadcrumb::add_item($this->_info->title, admin_url('', true));
 
         /** -------- Pagination Config */
-        $config = collect(['sort' => $this->id_key, 'dir' => 'desc', 'limit' => 25, 'group' => 'skills.' . $this->id_key])->merge(request()->query())->toArray();
+        $config = collect(['sort' => $this->id_key, 'dir' => 'desc', 'limit' => 25, 'group' => 'skill_management.' . $this->id_key])->merge(request()->query())->toArray();
 
         /** -------- Query */
-        $select = "skills.id
-, skills.type
-, skills.skill
--- , skills.workstation_id
-, workstations.name as workstation
-, skills.weightage
-, skills.status
+        $select = "skill_management.id
+, skill_management.name
+, skill_management.status
 
     ";
         $SQL = $this->model->select(\DB::raw($select));
@@ -77,7 +73,7 @@ class SkillController extends Controller
             $SQL = $SQL->whereRaw($where);
         }
 
-        $SQL = $SQL->leftJoin('workstations', 'workstations.id', '=', 'skills.workstation_id');
+        // $SQL = $SQL->leftJoin('workstations', 'workstations.id', '=', 'skills.workstation_id');
 
         $SQL = $SQL->orderBy($config['sort'], $config['dir'])->groupBy($config['group']);
 
@@ -134,8 +130,7 @@ class SkillController extends Controller
 
         /** -------- Validation */
         $validator_rules = [
-        'skill' => "required",
-                'type' => "required",
+                'name' => "required",
                 ];
         $validator = \Validator::make(request()->all(), $validator_rules);
         if ($validator->fails()) {
@@ -160,12 +155,25 @@ class SkillController extends Controller
 
         if ($id > 0) {
             $row = $this->model->find($id);
-            $row = $row->fill($data['data']);
+
+            $nameArray = json_decode($data['data']['name'], true);
+            $row->name = $nameArray[0];
+            $row->save();
+
         } else {
-            $row = $this->model->fill($data['data']);
+            $rowData = $data['data'];
+            // Decode JSON strings into arrays
+            $nameArray = json_decode($data['data']['name'], true);
+            // Create new model instance
+            $row = new SkillManagement(); // Replace YourModel with your model class name
+            foreach ($nameArray as $key => $name) {
+                $row->create([
+                    'name' => $name,
+                ]);
+            }
         }
 
-        if ($status = $row->save()) {
+        if ($status = 'true') {
             if($id == 0){
                 $id = $row->{$this->id_key};
                 set_notification('Record has been inserted!', 'success');
