@@ -24,18 +24,32 @@
                             <div class="clone_container">
                                 <div class="from-group row mb-3 clone border p-3 bg-light">
                                     <div class="col-lg-6">
-                                        <label for="Workstation" class="col-form-label required">{{ __('Workstation') }}:</label>
-                                        <select name="workstation_id[]" id="workstation_id" class="form-control m-select2">
-                                            {!! selectBox("SELECT id, name FROM work_stations", old('workstation_id', $row->workstation_id)) !!}
+                                        <label for="supplier_id" class="col-form-label required">{{ __('Supplier') }}:</label>
+                                        <select name="supplier_id[]" id="supplier_id" class="form-control m-select2">
+                                            {!! selectBox("SELECT id, name FROM suppliers", old('supplier_id', $row->supplier_id)) !!}
                                         </select>
                                     </div>
                                     <div class="col-lg-6">
-                                        <label for="Code" class="col-form-label required">{{ __('Workstation Code') }}:</label>
-                                        <input type="text" name="code[]" class="form-control code" placeholder="{{ __('Workstation Code') }}" value="{{ old('title', $row->code) }}" />
+                                        <label for="supplier_id" class="col-form-label required">{{ __('Material') }}:</label>
+                                        <select name="material_id[]" id="material_id" class="form-control m-select2">
+                                            {!! selectBox("SELECT id, name FROM raw_material_profiles", old('material_id', $row->material_id)) !!}
+                                        </select>
                                     </div>
-                                    <div class="col-lg-5">
-                                        <label for="name" class="col-form-label">{{ __('Workstation Name') }}:</label>
-                                        <input type="text" name="name[]" class="form-control name" placeholder="{{ __('Workstation Name') }}" value="{{ old('title', $row->name) }}" />
+                                    <div class="col-lg-4">
+                                        <label for="rate" class="col-form-label required">{{ __('Rate') }}:</label>
+                                        <input type="number" name="rate[]" class="form-control rate" placeholder="{{ __('Rate') }}" value="{{ old('rate', $row->rate) }}" />
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label for="lead_time" class="col-form-label">{{ __('Lead Time') }}:</label>
+                                        <input type="text" name="lead_time[]" class="form-control lead_time" placeholder="{{ __('Lead Time') }}" value="{{ old('lead_time', $row->lead_time) }}" />
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label for="moq" class="col-form-label">{{ __('Minimum Order Quantity') }}:</label>
+                                        <input type="number" name="moq[]" class="form-control moq" placeholder="{{ __('Minimum Order Quantity') }}" value="{{ old('moq', $row->moq) }}" />
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label for="qty" class="col-form-label">{{ __('Quantity/PK') }}:</label>
+                                        <input type="number" name="qty[]" class="form-control qty" placeholder="{{ __('Quantity/PK') }}" value="{{ old('moq', $row->moq) }}" />
                                     </div>
                                     @if(empty($row->id))
                                     <div style="margin-top: 36px;">

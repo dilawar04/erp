@@ -81,8 +81,14 @@
 <script>
 
 $(document).ready(function () {
+    $.ajaxSetup({
+        headers:{
+            'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
     $('#calendarbtn').on('click', function() {
-        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        // var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var weekid = $('#weekid').val();
         var weeks_start_from = $('#weeks_start_from').val();
         var working_days = $('#working_days').val();
@@ -90,7 +96,6 @@ $(document).ready(function () {
             url: "/admin/full_calenders/action",
             type: "POST",
             data: {
-                _token: CSRF_TOKEN,
                 id: weekid,
                 weeks_start_from: weeks_start_from,
                 working_days: working_days,
@@ -99,16 +104,9 @@ $(document).ready(function () {
             cache: false,
             success: function(dataResult){
                 console.log(dataResult);
-                var dataResult = JSON.parse(dataResult);
-                
+                displayMessage("Update Successfully");
             }
         });
-    });
-
-    $.ajaxSetup({
-        headers:{
-            'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
-        }
     });
   
     var calendar = $('#calendar').fullCalendar({

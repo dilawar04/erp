@@ -62,15 +62,16 @@ class WorkstationOperationController extends Controller
 
         /** -------- Query */
         $select = "workstation_operations.id
-, workstation_operations.title
+        , workstation_operations.name
+        , workstation_operations.code
 -- , workstation_operations.workstation_id
-, workstations.name as workstation
+, work_stations.name as workstation
 , workstation_operations.status
 
     ";
         $SQL = $this->model->select(\DB::raw($select));
 
-        $SQL = $SQL->leftJoin('workstations', 'workstations.id', '=', 'workstation_operations.workstation_id');
+        $SQL = $SQL->leftJoin('work_stations', 'work_stations.id', '=', 'workstation_operations.workstation_id');
         //$SQL = $SQL->leftJoin('users', 'users.id', '=', 'workstation_operations.user_id');
         /** -------- WHERE */
         $where = $this->where;
@@ -134,7 +135,9 @@ class WorkstationOperationController extends Controller
 
         /** -------- Validation */
         $validator_rules = [
-            'title' => "required",
+            'name' => "required",
+            'code' => "required",
+            'workstation_id' => "required",
         ];
         $validator = \Validator::make(request()->all(), $validator_rules);
         if ($validator->fails()) {
@@ -159,12 +162,36 @@ class WorkstationOperationController extends Controller
 
         if ($id > 0) {
             $row = $this->model->find($id);
-            $row = $row->fill($data['data']);
+            $workstationIdArray = json_decode($data['data']['workstation_id'], true);
+            $codeArray = json_decode($data['data']['code'], true);
+            $nameArray = json_decode($data['data']['name'], true);
+            $row->workstation_id = $workstationIdArray[0];
+            $row->code = $codeArray[0];
+            $row->name = $nameArray[0];
+            $row->save();
+            // $row = $row->fill($data['data']);
         } else {
-            $row = $this->model->fill($data['data']);
+            $rowData = $data['data'];
+            // Decode JSON strings into arrays
+            $workstationIdArray = json_decode($rowData['workstation_id'], true);
+            $codeArray = json_decode($rowData['code'], true);
+            $nameArray = json_decode($rowData['name'], true);
+
+            // Create new model instance
+            $row = new WorkstationOperation(); // Replace YourModel with your model class name
+
+            // Loop through the arrays and save each element to the respective columns
+            foreach ($codeArray as $key => $code) {
+                $row->create([
+                    'workstation_id' => $workstationIdArray[$key],
+                    'code' => $code,
+                    'name' => $nameArray[$key] // Make sure indices match between code and name arrays
+                ]);
+            }
+            // $row = $this->model->fill($data['data']);
         }
 
-        if ($status = $row->save()) {
+        if ($status = 'true') {
             if ($id == 0) {
                 $id = $row->{$this->id_key};
                 set_notification('Record has been inserted!', 'success');

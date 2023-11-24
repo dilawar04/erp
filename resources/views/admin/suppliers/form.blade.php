@@ -51,7 +51,7 @@
                             <div class="kt-separator kt-separator--border-dashed kt-separator--space-md"></div>
                                <div class="col-3">
                                     <label for="city" class="col-form-label required">{{ __('City') }}:</label>
-                                    <input type="text" name="city[]" id="city" class="form-control" placeholder="{{ __('City') }}" value="{{ old('city', $row->state) }}"/>
+                                    <input type="text" name="city" id="city" class="form-control" placeholder="{{ __('City') }}" value="{{ old('city', $row->state) }}"/>
                                 </div>
                                 
                             <div class="kt-separator kt-separator--border-dashed kt-separator--space-md"></div>
@@ -68,12 +68,12 @@
                                 
                                 <div class="col-4">
                                     <label for="filter" class="col-form-label required">{{ __('Filter') }}:</label>
-                                    <select name="filter" id="filter" class="form-control m-select2">
-                                     {!! selectBox(DB_enumValues('suppliers', 'filter'), old('filter', $row->filter)) !!}
+                                    <select name="filter" id="filter" class="form-control m-select2 multiple-form">
+                                        {!! selectBox(DB_enumValues('suppliers', 'filter'), old('filter', $row->filter)) !!}
                                     </select>
                                 </div>
                                 
-                               <div class="col-4">
+                               <div class="col-4" id="ntn">
                                     <label for="ntn" class="col-form-label required">{{ __('NTN') }}:</label>
                                     <input type="text" name="ntn" id="ntn" class="form-control" placeholder="{{ __('NTN') }}" value="{{ old('ntn', $row->ntn) }}"/>
                                 </div>
@@ -118,56 +118,19 @@
                                 </div>
                                 <div class="col-4">
                                     <label for="person_cnic" class="col-form-label required">{{ __('CNIC') }}:</label>
-                                    <input type="text" name="person_cnic" id="person_cnic" class="form-control" placeholder="{{ __('CNIC') }}" value="{{ old('person_cnic', $row->person_cnic) }}"/>
+                                    <input type="text" name="person_cnic" id="person_cnic" class="form-control" placeholder="{{ __('CNIC') }}" value="{{ old('person_cnic', $row->person_cnic) }}" data-inputmask="'mask': '99999-9999999-9'" required/>
+                                    <span class="form-text text-muted">eg:<code>10001-1000001-1</code></span>
                                 </div>
                             </div>
-
                            
-                            <div class="kt-separator kt-separator--border-dashed kt-separator--space-md"></div>
-                            <h5 class="">Raw Material</h5>
-                            {{ $row->raw_material_profiles = json_decode($row->raw_material_profiles) }}
-                            <div class="form-group row justify-content-center">
-                                <div class="col-6">
-                                    <label for="name_m" class="col-form-label required">{{ __('Name') }}:</label>
-                                    <input type="text" name="raw_material_profiles[name]" id="NTN" class="form-control namepicker" placeholder="{{ __('Name') }}" value="{{ old('$raw_material_profile.name', $row->$raw_material_profile->name) }}"/>
-                                </div>
-                                
-                                <div class="col-6"> 
-                                    <label for="raw_material_profiles_rate" class="col-form-label required">{{ __('Rate') }}:</label>
-                                    <input type="text" name="$raw_material_profiles[rate]" id="$raw_material_profiles_rate" class="form-control" placeholder="{{ __('Rate') }}" value="{{ old('$raw_material_profiles.contact', $row->$raw_material_profile->Rate) }}"/>
-                                </div>
-                                
-                                <div class="col-4">
-                                    <label for="$raw_material_profiles_load_time" class="col-form-label required">{{ __('Load Time') }}:</label>
-                                    <input type="text" name="$raw_material_profiles[load_time]" id="$raw_material_profiles_load_time" class="form-control timepicker" placeholder="{{ __('Load Time') }}" value="{{ old('$raw_material_profiles.load_time', $row->$raw_material_profiles->Load) }}"/>
-                                </div>
-                                
-                                <div class="col-4">
-                                    <label for="$raw_material_profiles_moq" class="col-form-label required">{{ __('MOQ') }}:</label>
-                                    <input type="text" name="$raw_material_profiles[moq]" id="$raw_material_profiles_moq" class="form-control" placeholder="{{ __('MOQ') }}" value="{{ old('$raw_material_profiles.moq', $row->$raw_material_profiles->MOQ) }}"/>
-                                </div>
-                                
-                                <div class="col-4">
-                                    <label for="quantity" class="col-form-label required">{{ __('QTY/PK') }}:</label>
-                                    <input type="text" name="quantity[quantity]" id="quantity" class="form-control" placeholder="{{ __('QTY/PK') }}" value="{{ old('quantity', $row->quantity->QTY) }}"/>
-                                </div>
-                                
-                            <div class="kt-separator kt-separator--border-dashed kt-separator--space-md"></div>
-                                
-
-                                {{--<div class="col-lg-12">
-                                    <label for="contract_document" class="col-form-label">{{ __('Schedule') }}:</label>
-                                    <input type="file" accept="image/*" name="contract_document" id="contract_document" class="form-control" placeholder="{{ __('Schedule') }}" value="{{ old('contract_document', $row->contract_document) }}" />
-                                </div>--}}
-                            </div>
                         <div class="kt-separator kt-separator--border-dashed kt-separator--space-md"></div>
                        
-                </div>
-                <div class="kt-portlet__foot">
-                            <div class="btn-group">
-                                @php $Form_btn = new Form_btn(); echo $Form_btn->buttons($form_buttons); @endphp
-                            </div>
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="btn-group">
+                            @php $Form_btn = new Form_btn(); echo $Form_btn->buttons($form_buttons); @endphp
                         </div>
+                    </div>
                 </div>
              </div>
         </div>
@@ -178,40 +141,44 @@
 
 {{-- Scripts --}}
 @section('scripts')
-    <script>
+<script>
     $("#suppliers").validate({
-  rules: {
-    field: {
-      required: true,
-      accept: "xls|csv"
-    }
-  }
-});
-   
-        $("form#users").validate({
-            // define validation rules
-            rules: {
-                //'user_type_id': {required: true,},
-                'first_name': {required: true,},
-                'email': {required: true, email: true,},
-                //'username': {required: true,},
-                //'password': {required: true, minlength: 8, maxlength: 8,},
-            },
-            /*messages: {
-            'user_type_id' : {required: 'User Type is required',},'first_name' : {required: 'First Name is required',},'email' : {required: 'Email is required',email: 'Email is not valid',},'username' : {required: 'Username is required',},'password' : {required: 'Password is required',minlength: 'Password must be at least 8 character\'s',maxlength: 'Password maximum 8 character\'s',},    },*/
-            //display error alert on form submit
-            invalidHandler: function (event, validator) {
-                KTUtil.scrollTop();
-                //validator.errorList[0].element.focus();
-            },
-            submitHandler: function (form) {
-                form.submit();
+        rules: {
+            field: {
+            required: true,
+            accept: "xls|csv"
             }
+        }
+    });
 
+        $(document).ready(function() {
+            $('.multiple-form').on('change', function() {
+                var value = $(this).val();
+                if (value === 'no') {
+                    $("#ntn").hide();
+                } else if (value === 'yes') {
+                    $("#ntn").show();
+                }
+            });
+            // Trigger the change event on page load for editing
+            $('.multiple-form').trigger('change');
         });
 
-        @if($row->id > 0)
-        $('#password').rules('remove');
-        @endif
-    </script>
+    $("form#suppliers").validate({
+        rules: {
+            'name': {required: true,},
+            'contact': {required: true, contact: true,},
+            'email': {required: true, email: true,},
+            'address': {required: true, address: true,},
+        },
+       
+        invalidHandler: function (event, validator) {
+            KTUtil.scrollTop();
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }
+
+    });
+</script>
 @endsection
