@@ -1,19 +1,19 @@
 <?php
 /**
  * Class Supplier
- * @property \App\Supplier $model
+ * @property \App\SupplierRawMaterial $model
  */
 
 namespace App\Http\Controllers\Admin;
 
-use App\Supplier;
+use App\SupplierRawMaterial;
 use Breadcrumb;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
-class SupplierController extends Controller
+class SupplierRawMaterialController extends Controller
 {
     public $module = ''; //Project module name
     public $_info = null; // Project module info
@@ -55,32 +55,26 @@ class SupplierController extends Controller
         \Breadcrumb::add_item($this->_info->title, admin_url('', true));
 
         /** -------- Pagination Config */
-        $config = collect(['sort' => $this->id_key, 'dir' => 'desc', 'limit' => 25, 'group' => 'suppliers.' . $this->id_key])->merge(request()->query())->toArray();
+        $config = collect(['sort' => $this->id_key, 'dir' => 'desc', 'limit' => 25, 'group' => 'supplier_raw_materials.' . $this->id_key])->merge(request()->query())->toArray();
 
-        $select = "suppliers.id
-, suppliers.name
-, suppliers.email
-, suppliers.contact
-, suppliers.country
-, suppliers.city
-, suppliers.state
-, suppliers.postal_code
-, suppliers.filter
-, suppliers.ntn
-, suppliers.type_id
-, suppliers.organization
-, suppliers.person_name
-, suppliers.person_cnic
-, suppliers.person_contact
-, suppliers.raw_material_profile_id
-, suppliers.contract_document
-, suppliers.status
-, suppliers.created_at
+        $select = "supplier_raw_materials.id
+        -- , supplier_raw_materials.supplier_id
+, suppliers.name as supplier
+-- , supplier_raw_materials.material_id
+, raw_material_profiles.name as material
+, supplier_raw_materials.rate
+, supplier_raw_materials.lead_time
+, supplier_raw_materials.moq
+, supplier_raw_materials.qty
+, supplier_raw_materials.status
+, supplier_raw_materials.created_at
 
     ";
         $SQL = $this->model->select(\DB::raw($select));
 
-        //$SQL = $SQL->leftJoin('types', 'types.id', '=', 'suppliers.type_id');
+        $SQL = $SQL->leftJoin('suppliers', 'suppliers.id', '=', 'supplier_raw_materials.supplier_id');
+
+        $SQL = $SQL->leftJoin('raw_material_profiles', 'raw_material_profiles.id', '=', 'supplier_raw_materials.material_id');
         /** -------- WHERE */
         $where = $this->where;
         //$select = $SQL;
@@ -144,11 +138,12 @@ class SupplierController extends Controller
 
         /** -------- Validation */
         $validator_rules = [
-            'name' => "required",
-            'contact' => "required",
-            'email' => "required",
-            'address' => "required",
-            'contract_document' => 'mimes:pdf,xls,doc,docx,pptx,pps|max:20000',
+            'supplier_id' => "required",
+            'material_id' => "required",
+            'rate' => "required",
+            'lead_time' => "required",
+            'moq' => "required",
+            'qty' => "required",
         ];
         $validator = \Validator::make(request()->all(), $validator_rules);
         if ($validator->fails()) {
@@ -172,12 +167,48 @@ class SupplierController extends Controller
 
         if ($id > 0) {
             $row = $this->model->find($id);
-            $row = $row->fill($data['data']);
+
+            $supplierIdArray = json_decode($data['data']['supplier_id'], true);
+            $materialIdArray = json_decode($data['data']['material_id'], true);
+            $rateArray = json_decode($data['data']['rate'], true);
+            $leadtimeArray = json_decode($data['data']['lead_time'], true);
+            $moqArray = json_decode($data['data']['moq'], true);
+            $qtyArray = json_decode($data['data']['qty'], true);
+
+            $row->supplier_id = $supplierIdArray[0];
+            $row->material_id = $materialIdArray[0];
+            $row->rate = $rateArray[0];
+            $row->lead_time = $leadtimeArray[0];
+            $row->moq = $moqArray[0];
+            $row->qty = $qtyArray[0];
+            $row->save();
         } else {
-            $row = $this->model->fill($data['data']);
+            $rowData = $data['data'];
+            // Decode JSON strings into arrays
+            $supplierIdArray = json_decode($data['data']['supplier_id'], true);
+            $materialIdArray = json_decode($data['data']['material_id'], true);
+            $rateArray = json_decode($data['data']['rate'], true);
+            $leadtimeArray = json_decode($data['data']['lead_time'], true);
+            $moqArray = json_decode($data['data']['moq'], true);
+            $qtyArray = json_decode($data['data']['qty'], true);
+
+            // Create new model instance
+            $row = new SupplierRawMaterial(); // Replace YourModel with your model class name
+
+            // Loop through the arrays and save each element to the respective columns
+            foreach ($supplierIdArray as $key => $supplier) {
+                $row->create([
+                    'supplier_id' => $supplier,
+                    'material_id' => $materialIdArray[$key],
+                    'rate' => $rateArray[$key],
+                    'lead_time' => $leadtimeArray[$key],
+                    'moq' => $moqArray[$key], // Make sure indices match between code and name arrays
+                    'qty' => $qtyArray[$key] // Make sure indices match between code and name arrays
+                ]);
+            }
         }
 
-        if ($status = $row->save()) {
+        if ($status = 'true') {
             if ($id == 0) {
                 $id = $row->{$this->id_key};
                 set_notification('Record has been inserted!', 'success');

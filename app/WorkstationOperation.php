@@ -15,10 +15,4 @@ class WorkstationOperation extends Model
 
     protected $guarded = [];
 
-
-    public function workstations()
-    {
-        return $this->hasOne('App\workstation', 'id', 'workstation_id');
-    }
-
 }

@@ -53,6 +53,8 @@ class FullCalenderController extends Controller
      */
     public function index()
     {
+        \Breadcrumb::add_item($this->_info->title, admin_url('', true));
+
     	if(request()->ajax())
     	{
     		$data = FullCalender::whereDate('start', '>=', request()->start)
@@ -61,7 +63,8 @@ class FullCalenderController extends Controller
             return response()->json($data);
     	}
         $EventsCalender = EventsCalender::first();
-
+        
+        \View::share('_this', (object)get_object_vars($this));
     	return view('/admin/full_calenders/grid')->with(compact('EventsCalender'));
     }
 
