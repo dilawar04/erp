@@ -18,11 +18,11 @@
                         <div class="kt-portlet__body">
                             <div class="clone_container">
                             <div class="form-group row clone">
-                                <div class="col-lg-3">
+                                <div class="col-lg-6">
                                     <label for="ntn" class="col-form-label required">{{ __('NTN') }}:</label>
                                     <input type="text" name="ntn" id="ntn" class="form-control" placeholder="{{ __('NTN') }}" value="{{ old('ntn', $row->ntn) }}" />
                                 </div>
-                                <div class="col-lg-3">
+                                <div class="col-lg-6">
                                     <label for="sales_tax" class="col-form-label required">{{ __('Sales Tax') }}:</label>
                                     <input type="text" name="sales_tax" id="sales_tax" class="form-control" placeholder="{{ __('Sales Tax') }}" value="{{ old('sales_tax', $row->sales_tax) }}" />
                                 </div>
