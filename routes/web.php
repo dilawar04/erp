@@ -45,13 +45,13 @@ Route::get('/clear-cache/{module?}', function($module = '') {
  *‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒*/
 
 Route::get('/RetrieveSecurityToken' , 'RetrieveSecurityTokenController@index');
- 
+
 Route::get(env('ADMIN_URI') . '/login', 'Admin\LoginController@index');
 Route::post(env('ADMIN_URI') . '/login/do_login', 'Admin\LoginController@do_login');
 Route::get(env('ADMIN_URI') . '/login/logout', 'Admin\LoginController@logout');
 
 Route::middleware(['auth', 'admin'])->prefix(env('ADMIN_URI'))->group( function () {
-        
+
     Route::any('/{controller}/{method?}/{params?}',
         function ($controller, $method = 'index', $params = null) {
             $app = app();
@@ -97,7 +97,7 @@ Route::get('/register', 'AuthController@register')->name('register');*/
 
 
 
-
+//test deployment
 
 Route::get('posts', 'BlogController@index')->name('blog');
 Route::get('posts/category/{slug}', 'BlogController@index');
