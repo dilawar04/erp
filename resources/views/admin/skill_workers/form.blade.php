@@ -10,7 +10,7 @@
         @csrf
         @include('admin.layouts.inc.stickybar', compact('form_buttons'))
         <div class="kt-container kt-container--fluid kt-grid__item kt-grid__item--fluid">
-            <input type="hidden" name="id" class="form-control" placeholder="{{ __('ID') }}" value="{{ old('id', $row->id) }}" />
+            <input type="hidden" name="id" id="id" class="form-control" placeholder="{{ __('ID') }}" value="{{ old('id', $row->id) }}" />
             <!-- begin:: Content -->
 
             <div class="row">
@@ -29,14 +29,17 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <label for="Workstation" class="col-form-label required">{{ __('Workstation') }}:</label>
-                                        <select name="workstation_id[]" id="workstation_id" class="form-control m-select2">
+                                        <select name="workstation_id[]" id="workstation" class="form-control m-select2">
+                                            <option value="" selected>-- Select --</option>
                                             {!! selectBox("SELECT id, name FROM work_stations", old('workstation_id', $row->workstation_id)) !!}
                                         </select>
                                     </div>
                                     <div class="col-lg-6">
                                         <label for="operation" class="col-form-label required">{{ __('Operation') }}:</label>
-                                        <select name="operation_id[]" id="operation_id" class="form-control m-select2">
+                                        <!-- <select name="operation_id[]" id="operation_id" class="form-control m-select2">
                                             {!! selectBox("SELECT id, name FROM workstation_operations", old('operation_id', $row->operation_id)) !!}
+                                        </select> -->
+                                        <select id="operation_id" name="operation_id[]" class="form-control m-select2">
                                         </select>
                                     </div>
                                     <div class="col-lg-12">
@@ -77,6 +80,126 @@
     <!--end::Form-->
 @endsection {{-- Scripts --}} @section('scripts')
     <script>
+
+            // $(document).ready(function () {
+            //     $('#operation_id').html('<option value="">-- Select Operation --</option>');
+            //     /*------------------------------------------
+            //     --------------------------------------------
+            //     Operation Dropdown Change Event
+            //     --------------------------------------------
+            //     --------------------------------------------*/
+            //     $('#workstation').on('change', function () {
+            //         var workstationId = this.value;
+            //         $("#operation_id").html('');
+            //         $.ajax({
+            //             url: "{{url('admin/skill_workers/form')}}",
+            //             type: "POST",
+            //             data: {
+            //                 workstation_id: workstationId,
+            //                 type: 'workstation',
+            //                 _token: '{{csrf_token()}}'
+            //             },
+            //             dataType: 'json',
+            //             success: function (result) {
+            //                 $('#operation_id').html('<option value="">-- Select Operation --</option>');
+            //                 $.each(result.workstation, function (key, value) {
+            //                     $("#operation_id").append('<option value="' + value
+            //                         .id + '">' + value.name + '</option>');
+            //                 });
+            //             }
+            //         });
+            //     });
+            //     $('#workstation').trigger('change');
+
+            // });
+            // $('#operation_id').html('<option value="">-- Select Operation --</option>');
+
+
+            // window.addEventListener("load", (event) => {
+            //     $('#operation_id').html('<option value="">-- Select Operation --</option>');
+
+            //     function fetchOperations(workstationId) {
+            //         $('#operation_id').html('<option value="">-- Select Operation --</option>');
+            //         $.ajax({
+            //             url: "{{ url('admin/skill_workers/form') }}",
+            //             type: "POST",
+            //             data: {
+            //                 workstation_id: workstationId,
+            //                 type: 'workstation',
+            //                 _token: '{{ csrf_token() }}'
+            //             },
+            //             dataType: 'json',
+            //             success: function (result) {
+            //                 if ($('#id').val()) { // Check if there is a value for ID
+            //                     var savedOperationId = "{{ $row->operation_id }}"; // Get the saved operation ID
+            //                     $.each(result.workstation, function (key, value) {
+            //                         var selected = (value.id == savedOperationId) ? 'selected' : '';
+            //                         $("#operation_id").append('<option value="' + value.id + '" ' + selected + '>' + value.name + '</option>');
+            //                     });
+            //                 } else {
+            //                     $('#operation_id').html('<option value="">-- Select Operation --</option>');
+            //                     $.each(result.workstation, function (key, value) {
+            //                         $("#operation_id").append('<option value="' + value.id + '">' + value.name + '</option>');
+            //                     });
+            //                 }
+            //             }
+            //         });
+            //     }
+
+            //     $('#workstation').on('change', function () {
+            //         var workstationId = this.value;
+            //         $("#operation_id").html('');
+            //         if (workstationId !== '') {
+            //             fetchOperations(workstationId);
+            //         }
+            //     });
+
+            //     $('#workstation').trigger('change');
+            // });
+
+
+            window.addEventListener("load", (event) => {
+                function fetchOperations(workstationId) {
+                    $.ajax({
+                        url: "{{ url('admin/skill_workers/form') }}",
+                        type: "POST",
+                        data: {
+                            workstation_id: workstationId,
+                            type: 'workstation',
+                            _token: '{{ csrf_token() }}'
+                        },
+                        dataType: 'json',
+                        success: function (result) {
+                            if ($('#id').val()) { // Check if there is a value for ID (Edit scenario)
+                                var savedOperationId = "{{ $row->operation_id }}"; // Get the saved operation ID
+                                $.each(result.workstation, function (key, value) {
+                                    var selected = (value.id == savedOperationId) ? 'selected' : '';
+                                    $("#operation_id").append('<option value="' + value.id + '" ' + selected + '>' + value.name + '</option>');
+                                });
+                            } else { // For new records (Addition)
+                                $('#operation_id').html('<option value="">-- Select Operation --</option>');
+                                $.each(result.workstation, function (key, value) {
+                                    $("#operation_id").append('<option value="' + value.id + '">' + value.name + '</option>');
+                                });
+                            }
+                        }
+                    });
+                }
+
+                $('#workstation').on('change', function () {
+                    var workstationId = this.value;
+                    $("#operation_id").html('');
+                    if (workstationId !== '') {
+                        fetchOperations(workstationId);
+                    } else if (!$('#id').val()) { // If workstation is not selected and it's a new record
+                        $('#operation_id').html('<option value="">-- Select Operation --</option>');
+                    }
+                });
+
+                $('#workstation').trigger('change');
+            });
+
+
         function add_more_cb(clone, clone_container){
             const index = clone_container.find('.clone').length - 1;
         }
