@@ -7,6 +7,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\SkillWorker;
+use App\WorkstationOperation;
 use Breadcrumb;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -97,6 +98,14 @@ class SkillWorkerController extends Controller
      */
     public function form()
     {
+        if(request()->type == 'workstation'){
+            $data['workstation'] = WorkstationOperation::where("workstation_id", request()->workstation_id)
+            ->get(["name", "id"]);
+
+            return response()->json($data);
+        }
+
+
         $id = getUri(4);
         if ($id > 0) {
             $row = $this->model->find($id);
