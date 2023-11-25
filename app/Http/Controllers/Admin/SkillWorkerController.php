@@ -60,11 +60,19 @@ class SkillWorkerController extends Controller
 
         /** -------- Query */
         $select = "skill_workers.id
-, skill_workers.name
+        , skill_workers.name
+        -- , skill_workers.workstation_id
+, work_stations.name as workstation
+-- , skill_workers.operation_id
+, workstation_operations.name as operation
+, skill_workers.operation_weightage
 , skill_workers.status
-
     ";
         $SQL = $this->model->select(\DB::raw($select));
+
+        $SQL = $SQL->leftJoin('work_stations', 'work_stations.id', '=', 'skill_workers.workstation_id');
+
+        $SQL = $SQL->leftJoin('workstation_operations', 'workstation_operations.id', '=', 'skill_workers.operation_id');
 
         /** -------- WHERE */
         $where = $this->where;
@@ -104,8 +112,6 @@ class SkillWorkerController extends Controller
 
             return response()->json($data);
         }
-
-
         $id = getUri(4);
         if ($id > 0) {
             $row = $this->model->find($id);
@@ -139,8 +145,11 @@ class SkillWorkerController extends Controller
 
         /** -------- Validation */
         $validator_rules = [
-                'name' => "required",
-                ];
+            'name' => "required",
+            'workstation_id' => "required",
+            'operation_id' => "required",
+            'operation_weightage' => "required"
+        ];
         $validator = \Validator::make(request()->all(), $validator_rules);
         if ($validator->fails()) {
             if (request()->ajax() || request()->is('api/*')) {
