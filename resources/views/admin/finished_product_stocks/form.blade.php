@@ -18,9 +18,13 @@
 
                         <div class="kt-portlet__body">
                             <div class="form-group row">
+                            <div class="col-lg-6">
+                                    <label for="location" class="col-form-label required">Location:</label>
+                                    <input type="text" name="location" id="location" class="form-control" placeholder="Location" value="{{ old('location', $row->location) }}" />
+                                </div>
                                    <div class="col-lg-6">
-                                    <label for="opening_quantity" class="col-form-label required">Opening Quantity:</label>
-                                    <input type="text" name="opening_quantity" id="opening_quantity" class="form-control" placeholder="Opening Quantity" value="{{ old('opening_quantity', $row->opening_quantity) }}" />
+                                    <label for="opening_stock" class="col-form-label required">Opening Stock:</label>
+                                    <input type="text" name="opening_stock" id="opening_stock" class="form-control" placeholder="Opening Stock" value="{{ old('opening_stock', $row->opening_stock) }}" />
                                 </div>
                                 <div class="col-lg-6">
                                     <label for="stock_rate" class="col-form-label required">Stock Rate:</label>
@@ -35,13 +39,13 @@
                                     <input type="datetime-local" name="opening_date" id="opening_date" class="form-control" placeholder="Opening Date" value="{{old('opening_date', $row->opening_date)}}" />
                                 </div>
 
-                                 <div class="col-lg-6">
-                                      <label for="unit_id" class="col-form-label required">Unit Id:</label>
-                                                <select name="unit_id" id="unit_id" class="form-control m_selectpicker" >
-                                               <option value="">Select Unit Id</option>
-                                         {!! selectBox(DB_enumValues('units', 'unit_id'), old('unit_id', $row->unit_id)) !!}
-                                        </select>
-                                        </div>
+                                <div class="col-lg-6">
+                                    <label for="unit_id" class="col-form-label required">Unit:</label>
+                                    <select name="unit_id" id="unit_id" class="form-control m_selectpicker" >
+                                    <option value="{{ old('unit_id', $row->unit_id) }}">Select Unit</option>
+                                    {!! selectBox(DB_enumValues('units', 'unit_id'), old('unit_id', $row->unit_id)) !!}
+                                    </select>
+                                </div>
                             </div>
                             <div class="kt-separator kt-separator--border-dashed kt-separator--space-md"></div>
                         </div>
