@@ -39,7 +39,7 @@
                                     <label for="method" class="col-form-label required">Method:</label>
                                     <input type="text" name="method" id="method" class="form-control" placeholder="Method" value="{{ old('method', $row->method) }}" />
                                 </div>
-                            
+
                                 <div class="col-lg-6">
                                     <label for="inspection_tool" class="col-form-label required">Inspection Tool:</label>
                                     <input type="text" name="inspection_tool" id="inspection_tool" class="form-control" placeholder="Inspection Tool" value="{{ old('inspection_tool', $row->inspection_tool) }}" />
@@ -74,6 +74,7 @@
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </form>
     <!--end::Form-->
