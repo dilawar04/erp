@@ -69,16 +69,11 @@ class RawMaterialProfileController extends Controller
 , raw_material_profiles.market_name
 , raw_material_profiles.raw_material_categories_id
 , raw_material_profiles.unit_id
-, raw_material_profiles.multiple_unit
-, raw_material_profiles.secondary_unit
-, raw_material_profiles.conversion_factor
 , raw_material_profiles.reorder_quantity
 , raw_material_profiles.moq
-, raw_material_profiles.store
+, raw_material_profiles.store_id
 , raw_material_profiles.storage_level_1
 , raw_material_profiles.storage_level_2
-, raw_material_profiles.level_1
-, raw_material_profiles.level_2
 , raw_material_profiles.exclusive_location
 , raw_material_profiles.status
 , raw_material_profiles.created_at
