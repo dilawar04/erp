@@ -22,23 +22,26 @@
                         <div class="kt-portlet__body">
                             <div class="form-group row">
                                 <div class="col-lg-6">
-                                    <label for="name" class="col-form-label required">{{ __('Name') }}:</label>
-                                    <input type="text" name="name" id="name" class="form-control" placeholder="{{ __('Name') }}" value="{{ old('name', $row->name) }}"/>
-                                </div>
-                                <div class="col-lg-2">
-                                    <label for="type" class="col-form-label required">{{ __('Store Material Type') }}:</label>
-                                    <select name="type" id="type" class="form-control m_selectpicker" ="form-control" placeholder="{{ __('Store Material Type') }}" value="{{ old('store_material_type', $row->store_material_type) }}"/>
-                                        {!! selectBox(DB_enumValues('stores', 'type'), old('type', $row->type)) !!}
+                                    <label for="store-location-type" class="col-form-label required">{{ __('Store Location Type') }}:</label>
+                                    <select name="store_location_type" id="store_location_type" class="form-control m_selectpicker">
+                                        {!! selectBox(DB_enumValues('stores', 'store_location_type'), old('store_location_type', $row->store_location_type)) !!}
                                     </select>
-                                </div>
-                                <div class="col-lg-4">
-                                    <label for="store_location_type" class="col-form-label">{{ __('Store Location Type') }}:</label>
-                                    <input type="text" name="store_location_type" id="store_location_type" class="form-control" placeholder="{{ __('Store Location Type') }}" value="{{ old('store_location_type', $row->store_location_type) }}"/>
-                                </div>
+                                </div>  
                             </div>
                             <div class="form-group row">
-                                
                                 <div class="col-lg-6">
+                                    <label for="store-internal-name" class="col-form-label required">{{ __('Store Internal Name') }}:</label>
+                                    <input type="text" name="internal_name" id="internal_name" class="form-control" placeholder="{{ __('Store Internal Name') }}" value="{{ old('internal_name', $row->internal_name) }}"/>
+                                </div> 
+                                <div class="col-lg-6">
+                                    <label for="store-material-type" class="col-form-label required">{{ __('Store Material Type') }}:</label>
+                                    <select name="internal_store_material_type" id="internal_store_material_type" class="form-control m_selectpicker">
+                                        {!! selectBox(DB_enumValues('stores', 'internal_store_material_type'), old('internal_store_material_type', $row->internal_store_material_type)) !!}
+                                    </select>
+                                </div>   
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-5">
                                     <label for="location" class="col-form-label">{{ __('Location') }}:</label>
                                     <select name="location_id" id="location_id" class="form-control m-select2">
                                         <option value="">Select Office</option>
@@ -50,7 +53,16 @@
                                     <label for="no_of_blocks" class="col-form-label">{{ __('No Of Blocks') }}:</label>
                                     <input type="number" min="1" name="no_of_blocks" id="no_of_blocks" class="form-control" placeholder="{{ __('No Of Blocks') }}" value="{{ old('no_of_blocks', ($row->no_of_blocks > 1 ? $row->no_of_blocks : 1)) }}"/>
                                 </div>
-                               
+                                <div class="col-lg-3">
+                                    <label for="series-type" class="col-form-label">{{ __('Series Type') }}:</label>
+                                    <select name="series_type" id="series_type" class="form-control m-select2">
+                                        <option value="">Select Office</option>
+                                        <option value="Numeric">Numeric</option>
+                                        <option value="Alphabetic">Alphabetic</option>
+                                    </select>
+                                </div>
+
+                                <button type="button" class="btn btn-info add-blocks" style="padding: 10px 25px 10px 25px;margin: 37px;">Add</button>
                             </div>
 
                             <div class="kt-separator kt-separator--border-dashed kt-separator--space-md"></div>
@@ -60,7 +72,7 @@
                                     <div class="form-group row">
                                         <div class="col-lg-6">
                                             <label for="mode_storages" class="col-form-label">{{ __('Mode of Storages') }}:</label>
-                                            <input type="text" name="mode_storages" id="mode_storages" class="form-control" placeholder="{{ __('Mode of Storages') }}" value="{{ old('mode_storages', $row->mode_storages) }}"/>
+                                            <input type="text" name="mode_storages" id="mode_storages" class="form-control mode_storages" placeholder="{{ __('Mode of Storages') }}" value="{{ old('mode_storages', $row->mode_storages) }}"/>
                                         </div>
                                         <div class="col-lg-6">
                                             <label for="series_type" class="col-form-label">{{ __('Series Type') }}:</label>
@@ -131,13 +143,13 @@
 {{-- Scripts --}}
 @section('scripts')
     <script>
-        $('#type').on('change', function (){
+        $('#store_location_type').on('change', function (){
            const _this = $(this);
            $('[class*="-store"]').hide(0, function (){
                $('.' + _this.val().toLowerCase() + '-store').show(0)
            })
         });
-        $('#type').trigger('change');
+        $('#store_location_type').trigger('change');
 
         $('#no_of_blocks').on('blur', function (){
             const _this = $(this);
@@ -154,6 +166,21 @@
             }
         });
 
+        $('#series_type').on('change', function () {
+            const selectedValue = $(this).val();
+            const modeStoragesInputs = $('.mode_storages');
+
+            if (selectedValue === 'Numeric') {
+                modeStoragesInputs.attr('type', 'number');
+            } else if (selectedValue === 'Alphabetic') {
+                modeStoragesInputs.attr('type', 'text');
+            }
+        });
+
+        // Triggering #series_type change event when .add-blocks is clicked
+        $('.add-blocks').on('click', function () {
+            $('#series_type').trigger('change');
+        });
 
         $("form#stores").validate({
             // define validation rules

@@ -14,10 +14,5 @@ class Store extends Model
     //protected $perPage = 15;
 
     protected $guarded = [];
-
-    
-                    public function countries() {
-                    return $this->hasOne('App\country', 'id', 'country');
-                }
                 
 }
