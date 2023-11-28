@@ -6,7 +6,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\SpecificationAppearance;
+use App\RawMaterialAppearance;
 use Breadcrumb;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -136,7 +136,9 @@ class RawMaterialAppearanceController extends Controller
 
         /** -------- Validation */
         $validator_rules = [
-            'job_position' => "required",
+            'item' => "required",
+            'criteria' => "required",
+            'method' => "required",
         ];
         $validator = \Validator::make(request()->all(), $validator_rules);
         if ($validator->fails()) {
@@ -161,12 +163,46 @@ class RawMaterialAppearanceController extends Controller
 
         if ($id > 0) {
             $row = $this->model->find($id);
-            $row = $row->fill($data['data']);
+            $itemArray = json_decode($data['data']['item'], true);
+            $criteriaArray = json_decode($data['data']['criteria'], true);
+            $methodArray = json_decode($data['data']['method'], true);
+            $inspectiontoolArray = json_decode($data['data']['inspection_tool'], true);
+            $samplingcriteriaArray = json_decode($data['data']['sampling_criteria'], true);
+            $samplesizeArray = json_decode($data['data']['sample_size'], true);
+            $row->item = $itemArray[0];
+            $row->criteria = $criteriaArray[0];
+            $row->method = $methodArray[0];
+            $row->inspection_tool = $inspectiontoolArray[0];
+            $row->sampling_criteria = $samplingcriteriaArray[0];
+            $row->sample_size = $samplesizeArray[0];
+            $row->save();
         } else {
-            $row = $this->model->fill($data['data']);
+            $rowData = $data['data'];
+            // Decode JSON strings into arrays
+            $itemArray = json_decode($data['data']['item'], true);
+            $criteriaArray = json_decode($data['data']['criteria'], true);
+            $methodArray = json_decode($data['data']['method'], true);
+            $inspectiontoolArray = json_decode($data['data']['inspection_tool'], true);
+            $samplingcriteriaArray = json_decode($data['data']['sampling_criteria'], true);
+            $samplesizeArray = json_decode($data['data']['sample_size'], true);
+
+            // Create new model instance
+            $row = new RawMaterialAppearance(); // Replace YourModel with your model class name
+
+            // Loop through the arrays and save each element to the respective columns
+            foreach ($itemArray as $key => $item) {
+                $row->create([
+                    'item' => $item,
+                    'criteria' => $criteriaArray[$key],
+                    'method' => $methodArray[$key], // Make sure indices match between code and name arrays
+                    'inspection_tool' => $inspectiontoolArray[$key],
+                    'sampling_criteria' => $samplingcriteriaArray[$key],
+                    'sample_size' => $samplesizeArray[$key]
+                ]);
+            }
         }
 
-        if ($status = $row->save()) {
+        if ($status = 'true') {
             if ($id == 0) {
                 $id = $row->{$this->id_key};
                 set_notification('Record has been inserted!', 'success');

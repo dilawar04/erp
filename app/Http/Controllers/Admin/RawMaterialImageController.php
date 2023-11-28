@@ -59,7 +59,7 @@ class RawMaterialImageController extends Controller
 
         /** -------- Query */
         $select = "raw_material_images.id
-, raw_material_images.upload_document
+, raw_material_images.document_name
 , raw_material_images.upload_date
 , raw_material_images.status
 , raw_material_images.created_at
@@ -154,12 +154,37 @@ class RawMaterialImageController extends Controller
 
         if ($id > 0) {
             $row = $this->model->find($id);
-            $row = $row->fill($data['data']);
+
+            $documentnameArray = json_decode($data['data']['document_name'], true);
+            $uploaddateArray = json_decode($data['data']['upload_date'], true);
+            $uploaddocumentArray = json_decode($data['data']['upload_document'], true);
+
+            $row->document_name = $documentnameArray[0];
+            $row->upload_date = $uploaddateArray[0];
+            $row->upload_document = $uploaddocumentArray[0];
+            
+            $row->save();
         } else {
-            $row = $this->model->fill($data['data']);
+            $rowData = $data['data'];
+            // Decode JSON strings into arrays
+            $documentnameArray = json_decode($data['data']['document_name'], true);
+            $uploaddateArray = json_decode($data['data']['upload_date'], true);
+            $uploaddocumentArray = json_decode($data['data']['upload_document'], true);
+
+            // Create new model instance
+            $row = new RawMaterialImage(); // Replace YourModel with your model class name
+
+            // Loop through the arrays and save each element to the respective columns
+            foreach ($documentnameArray as $key => $documentname) {
+                $row->create([
+                    'document_name' => $documentname,
+                    'upload_date' => $uploaddateArray[$key],
+                    'upload_document' => $uploaddocumentArray[$key]
+                ]);
+            }
         }
 
-        if ($status = $row->save()) {
+        if ($status = 'true') {
             if ($id == 0) {
                 $id = $row->{$this->id_key};
                 set_notification('Record has been inserted!', 'success');

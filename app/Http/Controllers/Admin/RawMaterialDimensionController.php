@@ -66,10 +66,8 @@ class RawMaterialDimensionController extends Controller
 , raw_material_dimensions.tolerance
 , raw_material_dimensions.unit_id
 , raw_material_dimensions.method
-, raw_material_dimensions.inspection_id
 , raw_material_dimensions.sampling_criteria
 , raw_material_dimensions.sample_size
-, raw_material_dimensions.remarks
 , raw_material_dimensions.status
 , raw_material_dimensions.created_at
 
@@ -165,12 +163,62 @@ class RawMaterialDimensionController extends Controller
 
         if ($id > 0) {
             $row = $this->model->find($id);
-            $row = $row->fill($data['data']);
+
+            $itemArray = json_decode($data['data']['item'], true);
+            $valueArray = json_decode($data['data']['value'], true);
+            $toleranceArray = json_decode($data['data']['tolerance'], true);
+            $unitidArray = json_decode($data['data']['unit_id'], true);
+            $methodArray = json_decode($data['data']['method'], true);
+            $inspectiontoolArray = json_decode($data['data']['inspection_tool'], true);
+            $samplingcriteriaArray = json_decode($data['data']['sampling_criteria'], true);
+            $samplesizeArray = json_decode($data['data']['sample_size'], true);
+            $remarksArray = json_decode($data['data']['remarks'], true);
+
+            $row->item = $itemArray[0];
+            $row->value = $valueArray[0];
+            $row->tolerance = $methodArray[0];
+            $row->inspection_tool = $inspectiontoolArray[0];
+            $row->unit_id = $samplingcriteriaArray[0];
+            $row->method = $methodArray[0];
+            $row->inspection_tool = $inspectiontoolArray[0];
+            $row->sampling_criteria = $samplingcriteriaArray[0];
+            $row->sample_size = $samplesizeArray[0];
+            $row->remarks = $remarksArray[0];
+            
+            $row->save();
         } else {
-            $row = $this->model->fill($data['data']);
+            $rowData = $data['data'];
+            // Decode JSON strings into arrays
+            $itemArray = json_decode($data['data']['item'], true);
+            $valueArray = json_decode($data['data']['value'], true);
+            $toleranceArray = json_decode($data['data']['tolerance'], true);
+            $unitidArray = json_decode($data['data']['unit_id'], true);
+            $methodArray = json_decode($data['data']['method'], true);
+            $inspectiontoolArray = json_decode($data['data']['inspection_tool'], true);
+            $samplingcriteriaArray = json_decode($data['data']['sampling_criteria'], true);
+            $samplesizeArray = json_decode($data['data']['sample_size'], true);
+            $remarksArray = json_decode($data['data']['remarks'], true);
+
+            // Create new model instance
+            $row = new RawMaterialDimension(); // Replace YourModel with your model class name
+
+            // Loop through the arrays and save each element to the respective columns
+            foreach ($itemArray as $key => $item) {
+                $row->create([
+                    'item' => $item,
+                    'value' => $valueArray[$key],
+                    'tolerance' => $toleranceArray[$key],
+                    'unit_id' => $unitidArray[$key],
+                    'method' => $methodArray[$key], // Make sure indices match between code and name arrays
+                    'inspection_tool' => $inspectiontoolArray[$key],
+                    'sampling_criteria' => $samplingcriteriaArray[$key],
+                    'sample_size' => $samplesizeArray[$key],
+                    'remarks' => $remarksArray[$key]
+                ]);
+            }
         }
 
-        if ($status = $row->save()) {
+        if ($status = 'true') {
             if ($id == 0) {
                 $id = $row->{$this->id_key};
                 set_notification('Record has been inserted!', 'success');

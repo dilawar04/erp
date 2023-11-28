@@ -21,35 +21,41 @@
                             <div class="form-group row mb-3 clone">
                                    <div class="col-lg-6">
                                     <label for="item" class="col-form-label required">Item:</label>
-                                    <input type="text" name="item" id="item" class="form-control" placeholder="Item" value="" />
+                                    <input type="text" name="item[]" id="item" class="form-control" placeholder="Item" value="{{ old('item', $row->item) }}" />
                                 </div>
                                 <div class="col-lg-6">
                                     <label for="criteria" class="col-form-label required">Criteria:</label>
-                                    <input type="text" name="criteria" id="criteria" class="form-control" placeholder="Criteria" value="" />
+                                    <input type="text" name="criteria[]" id="criteria" class="form-control" placeholder="Criteria" value="{{ old('criteria', $row->criteria) }}" />
                                 </div>
                                 <div class="col-lg-6">
                                     <label for="method" class="col-form-label required">Method:</label>
-                                    <input type="text" name="method" id="method" class="form-control" placeholder="Method" value="" />
+                                    <input type="text" name="method[]" id="method" class="form-control" placeholder="Method" value="{{ old('method', $row->method) }}" />
                                 </div>
                             
                                 <div class="col-lg-6">
                                     <label for="inspection_tool" class="col-form-label required">Inspection Tool:</label>
-                                    <input type="text" name="inspection_tool" id="inspection_tool" class="form-control" placeholder="Dob" value="" />
+                                    <select name="inspection_tool[]" id="inspection_tool" class="form-control m-select2">
+                                        {!! selectBox("SELECT id, name FROM inspection_methods", old('inspection_tool', $row->inspection_tool)) !!}
+                                    </select>  
                                 </div>
 
                                 <div class="col-lg-6">
                                     <label for="sampling_criteria" class="col-form-label required">Sampling Criteria:</label>
-                                    <input type="text" name="sampling_criteria" id="profile_picture" class="form-control" placeholder="Sampling Criteria" value="" />
+                                    <select name="sampling_criteria[]" id="sampling_criteria" class="form-control">
+                                        {!! selectBox(DB_enumValues('raw_material_appearances', 'sampling_criteria'), old('sampling_criteria', $row->sampling_criteria)) !!}
+                                    </select>
                                 </div>
 
                                 <div class="col-lg-6">
                                     <label for="sample_size" class="col-form-label required">Sample Size:</label>
-                                    <input type="text" name="sample_size" id="cnic" class="form-control" placeholder="Sample Size" value="" />
+                                    <input type="text" name="sample_size[]" id="cnic" class="form-control" placeholder="Sample Size" value="{{ old('sample_size', $row->sample_size) }}" />
                                 </div>
+                                @if(empty($row->id))
                                 <div class="col-lg-6" style="margin-top: 10px;">
-                                        <button type="button" class="btn btn-success btn-icon add-more" clone-container=".clone_container" callback="add_more_cb"><i class="la la-plus"></i></button>
-                                        <button type="button" class="btn btn-danger btn-icon" remove-limit="1" remove-el=".clone_container-.clone"><i class="la la-trash"></i></button>
-                                    </div>
+                                    <button type="button" class="btn btn-success btn-icon add-more" clone-container=".clone_container" callback="add_more_cb"><i class="la la-plus"></i></button>
+                                    <button type="button" class="btn btn-danger btn-icon" remove-limit="1" remove-el=".clone_container-.clone"><i class="la la-trash"></i></button>
+                                </div>
+                                @endif
                             </div>
                             <div class="kt-separator kt-separator--border-dashed kt-separator--space-md"></div>
                         </div>
@@ -67,79 +73,16 @@
     <!--end::Form-->
 @endsection {{-- Scripts --}} @section('scripts')
     <script>
-         $(form#raw_material_appearances).on('click', '.is_stations', function() {
-                let is_stations = $(this).val();
-
-                if (is_stations == 'true') {
-                    $('#is_stations-input-area').find('input[name="is_stations"]').addClass('input-required');
-                    $('#is_stations-input-area').show();
-                } else {
-                    $('#is_stations-input-area').find('input[name="is_stations"]').removeClass('input-required');
-                    $('#is_stations-input-area').hide();
-                }
-            });
-
-            $(form#raw_material_appearances).on('click', '#modal-submit-button', function() {
-                if (!checkRequiredInputs()) {
-                    notify(2, 'Please fill required inputs.');
-                }
-
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                    }
-                });
-                $.ajax({
-                    url: "{{ url('admin') }}",
-                    type: 'POST',
-                    data: $('#modal-form').serialize(),
-                    dataType: 'Json',
-                    success: function(response) {
-                        if (response.status) {
-                            setTimeout(() => {
-                                location.reload();
-                            }, 2000);
-                        }
-                        notify(response.status, response.message);
-                    }
-                });
-            });
-            $(document).on('click', '.edit-button', function() {
-                let url = "{{ url('admin', ":id") }}";
-                var id = $(this).data('id');
-                url = url.replace(':id', id);
-
-                $.ajax({
-                    url: url,
-                    type: 'get',
-                    dataType: 'Json',
-                    success: function(response) {
-                        if (response.status) {
-                            $('#modal-heading').text('Edit OEM');
-                            $('#modal-body').html(response.data);
-                            if ($('#station_checked').val() == 'true') {
-                                $('#stations-input-area').show();
-                            } else {
-                                $('#stations-input-area').hide();
-                            }
-                            $('#modal').show();
-                        } else {
-                            notify(response.status, response.message);
-                        }
-                    }
-                });
-            });
-
         $("form#raw_material_appearances").validate({
             // define validation rules
             rules: {
-                title: {
+                item: {
                     required: true,
                 },
-                email: {
+                criteria: {
                     required: true,
                 },
-                phone: {
+                method: {
                     required: true,
                 },
             },
