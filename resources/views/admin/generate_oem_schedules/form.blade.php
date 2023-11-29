@@ -29,7 +29,10 @@
                                     </div>
                                     <div class="col-lg-4">
                                     <label for="product" class="col-form-label required">{{ __('Product') }}:</label>
-                                       <input type="text" name="product" id="product" class="form-control product-picker" placeholder="{{ __('Product') }}" value="{{ old('product', $row->product) }}" >
+                                        <select name="product_id" id="product_id" class="form-control m-select2">
+                                            <option value="">Select product</option>
+                                            {!! selectBox("SELECT id, product_name FROM finished_product_profiles", old('product_id', $row->product_id)) !!}
+                                        </select>                                    
                                     </div>
                                      <div class="col-lg-5">
                                     <label for="quantity" class="col-form-label required">{{ __('Quantity') }}:</label>
@@ -39,7 +42,7 @@
                                     <label for="oem_id" class="col-form-label required">{{ __('Oems') }}:</label>
                                     <select name="oem_id" id="oem_id" class="form-control m-select2">
                                         <option value="">Select Oems</option>
-                                        {!! selectBox("SELECT id,title FROM departments", old('department_id', $row->department_id)) !!}
+                                        {!! selectBox("SELECT id,title FROM oems", old('oem_id', $row->oem_id)) !!}
                                     </select>
                                 </div>
                             </div>

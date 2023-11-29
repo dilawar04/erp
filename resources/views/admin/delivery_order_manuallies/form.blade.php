@@ -19,40 +19,42 @@
                              <div class="clone_container">
                              <div class="form-group row mb-3 clone">
                                 <div class="col-lg-6">
-                                    {{--<label for="oem_id" class="col-form-label">{{ __('Oem ID') }}:</label>
-                                    <input type="text" name="oem_id" id="oem_id" class="form-control" placeholder="{{ __('Oem ID') }}" value="{{ old('oem_id', $row->oem_id) }}" />--}}
-                                    <label for="oem_id" class="col-form-label text-right">{{ __(' Oem ID') }}:</label>
-                                    <select class="form-control kt-select2" name="oem_id" id="oem_id">
-                                        <option value="0">- Select -</option>
-                                       
+                                    <label for="oem_id" class="col-form-label text-right">{{ __(' Oem') }}:</label>
+                                    <select name="oem_id[]" id="oem_id" class="form-control m-select2">
+                                        <option value="">Select Oems</option>
+                                        {!! selectBox("SELECT id,title FROM oems", old('oem_id', $row->oem_id)) !!}
                                     </select>
                                 </div>
                                
                                 <div class="col-lg-6">
                                     <label for="date" class="col-form-label required">{{ __('Date') }}:</label>
-                                    <input type="date" name="date" id="date" class="form-control datepicker" placeholder="{{ __('Date') }}" value="{{ old('date', $row->date) }}" />
+                                    <input type="date" name="date[]" id="date" class="form-control datepicker" placeholder="{{ __('Date') }}" value="{{ old('date', $row->date) }}" />
                                 </div>
                                  <div class="col-lg-6">
                                     <label for="oem_code" class="col-form-label required">{{ __('Oem Code') }}:</label>
-                                    <input type="last" name="oem_code" id="oem_code" class="form-control codepicker" placeholder="{{ __('CODE FORMAT: AB-1234') }}" value="{{ old('oem_code', $row->oem_code) }}" />
+                                    <input type="text" name="oem_code[]" id="oem_code" class="form-control codepicker" placeholder="{{ __('CODE FORMAT: AB-1234') }}" value="{{ old('oem_code', $row->oem_code) }}" />
                                 </div>
-                                 <div class="col-lg-6">
+                                <div class="col-lg-6">
                                     <label for="product" class="col-form-label required">{{ __('Product') }}:</label>
-                                    <input type="text" name="product" id="product" class="form-control" placeholder="{{ __('Product') }}" value="{{ old('product', $row->product) }}" />
+                                    <select name="product_id[]" id="product_id" class="form-control m-select2">
+                                        <option value="">Select product</option>
+                                        {!! selectBox("SELECT id, product_name FROM finished_product_profiles", old('product_id', $row->product_id)) !!}
+                                    </select>  
                                 </div>
-                                 <div class="col-lg-6">
+                                <div class="col-lg-6">
                                     <label for="di_no" class="col-form-label required">{{ __('DI No') }}:</label>
-                                    <input type="no" name="di_no" id="di_no" class="form-control nopicker" placeholder="{{ __('DI No') }}" value="{{ old('di_no', $row->di_no) }}" />
+                                    <input type="no" name="di_no[]" id="di_no" class="form-control nopicker" placeholder="{{ __('DI No') }}" value="{{ old('di_no', $row->di_no) }}" />
                                 </div>
                                 <div class="col-lg-6">
                                     <label for="quantity" class="col-form-label required">{{ __('Quantity') }}:</label>
-                                    <input type="number" name="quantity" id="quantity" class="form-control nopicker" placeholder="{{ __('Quantity') }}" value="{{ old('quantity', $row->quantity) }}" />
+                                    <input type="number" name="quantity[]" id="quantity" class="form-control nopicker" placeholder="{{ __('Quantity') }}" value="{{ old('quantity', $row->quantity) }}" />
                                 </div>
-                                
-                                 <div class="col-lg-6" style="margin-top: 35px;">
-                                        <button type="button" class="btn btn-success btn-icon add-more" clone-container=".clone_container" callback="add_more_cb"><i class="la la-plus"></i></button>
-                                        <button type="button" class="btn btn-danger btn-icon" remove-limit="1" remove-el=".clone_container-.clone"><i class="la la-trash"></i></button>
-                                    </div>
+                                @if(empty($row->id))
+                                <div class="col-lg-6" style="margin-top: 35px;">
+                                    <button type="button" class="btn btn-success btn-icon add-more" clone-container=".clone_container" callback="add_more_cb"><i class="la la-plus"></i></button>
+                                    <button type="button" class="btn btn-danger btn-icon" remove-limit="1" remove-el=".clone_container-.clone"><i class="la la-trash"></i></button>
+                                </div>
+                                @endif
                                 </div>
                                     <div class="kt-separator kt-separator--border-dashed kt-separator--space-md"></div>
                                 </div>

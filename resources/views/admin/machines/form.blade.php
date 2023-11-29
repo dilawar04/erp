@@ -50,14 +50,7 @@
                                 </div>
                                 <div class="col-lg-2">
                                     <label for="installation_date" class="col-form-label">{{ __('Installation Date') }}:</label>
-                                    <input
-                                        type="text"
-                                        name="installation_date"
-                                        id="installation_date"
-                                        class="form-control datepicker"
-                                        placeholder="{{ __('Installation Date') }}"
-                                        value="{{ old('installation_date', $row->installation_date) }}"
-                                    />
+                                    <input type="text" name="installation_date" id="installation_date" class="form-control datepicker" placeholder="{{ __('Installation Date') }}" value="{{ old('installation_date', $row->installation_date) }}"/>
                                 </div>
                                  <div class="col-lg-4">
                                     <label for="workstation_id" class="col-form-label">{{ __('Workstation') }}:</label>
@@ -70,7 +63,7 @@
                             <div class="kt-separator kt-separator--border-dashed kt-separator--space-md"></div>
                             <div class="form-group row">
                                 <div class="col-lg-3">
-                                    <label for="warranty_type" class="col-form-label">{{ __('Warranty Type') }}:</label>
+                                    <label for="warranty_type" class="col-form-label">{{ __('Warranty Period') }}:</label>
                                     <input type="text" name="warranty_type" id="warranty_type datepicker" class="form-control datepicker" placeholder="{{ __('Warranty Type') }}" value="{{ old('warranty_type', $row->warranty_type) }}" />
                                 </div>
                                 <div class="col-lg-3">
@@ -81,6 +74,10 @@
                                  <div class="col-lg-3">
                                     <label for="warranty_status" class="col-form-label">{{ __('Warranty Status') }}:</label>
                                     <input type="text" name="warranty_status" id="warranty_status" class="form-control datepicker" placeholder="{{ __('Warranty Status') }}" value="{{ old('warranty_status', $row->warranty_status) }}" />
+                                </div>
+                                <div class="col-lg-3">
+                                    <label for="energy_consumption" class="col-form-label">{{ __('Energy Consumption / KWh') }}:</label>
+                                    <input type="text" name="energy_consumption" id="energy_consumption" class="form-control" placeholder="{{ __('Energy Consumption') }}" value="{{ old('energy_consumption', $row->energy_consumption) }}" />
                                 </div>
                                 <div class="col-lg-3">
                                     <label for="machine_status" class="col-form-label">{{ __(' Machine Status') }}:</label>

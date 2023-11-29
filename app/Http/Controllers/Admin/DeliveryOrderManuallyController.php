@@ -65,7 +65,6 @@ class DeliveryOrderManuallyController extends Controller
 , delivery_order_manuallies.date
 , delivery_order_manuallies.oem_id
 , delivery_order_manuallies.oem_code
-, delivery_order_manuallies.product
 , delivery_order_manuallies.di_no
 , delivery_order_manuallies.quantity
 , delivery_order_manuallies.status
@@ -166,12 +165,49 @@ class DeliveryOrderManuallyController extends Controller
 
         if ($id > 0) {
             $row = $this->model->find($id);
-            $row = $row->fill($data['data']);
+
+            $oemidArray = json_decode($data['data']['oem_id'], true);
+            $dateArray = json_decode($data['data']['date'], true);
+            $oemcodeArray = json_decode($data['data']['oem_code'], true);
+            $productidArray = json_decode($data['data']['product_id'], true);
+            $dinoArray = json_decode($data['data']['di_no'], true);
+            $quantityArray = json_decode($data['data']['quantity'], true);
+
+            $row->oem_id = $oemidArray[0];
+            $row->date = $dateArray[0];
+            $row->oem_code = $oemcodeArray[0];
+            $row->product_id = $productidArray[0];
+            $row->di_no = $dinoArray[0];
+            $row->quantity = $quantityArray[0];
+            
+            $row->save();
         } else {
-            $row = $this->model->fill($data['data']);
+            $rowData = $data['data'];
+            // Decode JSON strings into arrays
+            $oemidArray = json_decode($data['data']['oem_id'], true);
+            $dateArray = json_decode($data['data']['date'], true);
+            $oemcodeArray = json_decode($data['data']['oem_code'], true);
+            $productidArray = json_decode($data['data']['product_id'], true);
+            $dinoArray = json_decode($data['data']['di_no'], true);
+            $quantityArray = json_decode($data['data']['quantity'], true);
+
+            // Create new model instance
+            $row = new DeliveryOrderManually(); // Replace YourModel with your model class name
+
+            // Loop through the arrays and save each element to the respective columns
+            foreach ($oemidArray as $key => $oem) {
+                $row->create([
+                    'oem_id' => $oem,
+                    'date' => $dateArray[$key],
+                    'oem_code' => $oemcodeArray[$key],
+                    'product_id' => $productidArray[$key],
+                    'di_no' => $dinoArray[$key], // Make sure indices match between code and name arrays
+                    'quantity' => $quantityArray[$key]
+                ]);
+            }
         }
 
-        if ($status = $row->save()) {
+        if ($status = 'true') {
             if ($id == 0) {
                 $id = $row->{$this->id_key};
                 set_notification('Record has been inserted!', 'success');
