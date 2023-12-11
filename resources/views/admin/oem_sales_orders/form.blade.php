@@ -47,11 +47,11 @@
                                     </div>
                                     <div class="col-lg-2">
                                         <label for="from" class="col-form-label required">{{ __('From') }}:</label>
-                                        <input type="time" name="from[]" id="from" class="form-control" placeholder="{{ __('From') }}" value="{{ old('b_from.' . $index, $froms[$index]) }}" />
+                                        <input type="date" name="from[]" id="from" class="form-control" placeholder="{{ __('From') }}" value="{{ old('b_from.' . $index, $froms[$index]) }}" />
                                     </div>
                                     <div class="col-lg-2">
                                         <label for="till" class="col-form-label required">{{ __('Till') }}:</label>
-                                        <input type="time" name="till[]" id="till" class="form-control" placeholder="{{ __('Till') }}" value="{{ old('b_from.' . $index, $tills[$index]) }}" />
+                                        <input type="date" name="till[]" id="till" class="form-control" placeholder="{{ __('Till') }}" value="{{ old('b_from.' . $index, $tills[$index]) }}" />
                                     </div>
                                     <div style="margin-top: 36px;">
                                         <button type="button" class="btn btn-success btn-icon add-more"   clone-container=".clone_container" callback="add_more_cb"><i class="la la-plus"></i></button>

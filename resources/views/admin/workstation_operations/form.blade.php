@@ -30,11 +30,11 @@
                                         </select>
                                     </div>
                                     <div class="col-lg-6">
-                                        <label for="Code" class="col-form-label required">{{ __('Workstation Code') }}:</label>
+                                        <label for="Code" class="col-form-label required">{{ __('Operation Code') }}:</label>
                                         <input type="text" name="code[]" class="form-control code" placeholder="{{ __('Workstation Code') }}" value="{{ old('title', $row->code) }}" />
                                     </div>
                                     <div class="col-lg-5">
-                                        <label for="name" class="col-form-label">{{ __('Workstation Name') }}:</label>
+                                        <label for="name" class="col-form-label">{{ __('Operation Name') }}:</label>
                                         <input type="text" name="name[]" class="form-control name" placeholder="{{ __('Workstation Name') }}" value="{{ old('title', $row->name) }}" />
                                     </div>
                                     @if(empty($row->id))

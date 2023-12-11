@@ -19,10 +19,7 @@
                             <div class="form-group row justify-content-center">
                                 <div class="col-lg-8">
                                     <label for="title" class="col-form-label required">{{ __('Employee Type') }}:</label>
-                                      <select name="title" id="title" class="form-control m_selectpicker" >
-                                        <option value="{{old('title', $row->title)}}">Select Employee Type</option>
-                                        {!! selectBox(DB_enumValues('employee_types', 'title'), old('title', $row->title)) !!}
-                                    </select>
+                                    <input type="text" name="title" id="title" class="form-control" placeholder="{{ __('Title') }}" value="{{ old('title', $row->title) }}" />
                                 </div>
                             </div>
                             <div class="kt-separator kt-separator--border-dashed kt-separator--space-md"></div>

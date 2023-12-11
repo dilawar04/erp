@@ -198,7 +198,11 @@
             }
         });
 
-
+        $(document).on("input", '.employee_contribution, .employers_contribution', function () {
+            // Find the closest container (row) and calculate the total for that row
+            calcVal($(this).closest('.form-group'));
+        });
+        
         $("form#grades").validate({
             // define validation rules
             rules: {

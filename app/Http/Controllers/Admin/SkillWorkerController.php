@@ -60,7 +60,6 @@ class SkillWorkerController extends Controller
 
         /** -------- Query */
         $select = "skill_workers.id
-        , skill_workers.name
         -- , skill_workers.workstation_id
 , work_stations.name as workstation
 -- , skill_workers.operation_id
@@ -145,7 +144,6 @@ class SkillWorkerController extends Controller
 
         /** -------- Validation */
         $validator_rules = [
-            'name' => "required",
             'workstation_id' => "required",
             'operation_id' => "required",
             'operation_weightage' => "required"
