@@ -1,0 +1,3 @@
+DB_DATABASE=busin135_dev_erp_db
+DB_USERNAME=busin135_dev_erp
+DB_PASSWORD=jB9O^[7]%~LD

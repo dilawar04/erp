@@ -63,7 +63,7 @@ class OperationProcessParameterController extends Controller
 -- , products.product_id
 , operation_process_parameters.workstation_id
 -- , workstations.workstation_id
-, operation_process_parameters.opration_id
+, operation_process_parameters.operation_id
 -- , oprations.opration_id
 , operation_process_parameters.type
 , operation_process_parameters.status

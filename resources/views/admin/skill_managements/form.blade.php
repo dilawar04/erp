@@ -24,8 +24,8 @@
                             <div class="clone_container">
                                 <div class="from-group row mb-3 clone border p-3 bg-light">
                                     <div class="col-lg-10">
-                                        <label for="name" class="col-form-label">{{ __('Skill Management Name') }}:</label>
-                                        <input type="text" name="name[]" class="form-control name" placeholder="{{ __('Skill Management Name') }}" value="{{ old('name', $row->name) }}" />
+                                        <label for="name" class="col-form-label">{{ __('Management Skills') }}:</label>
+                                        <input type="text" name="name[]" class="form-control name" placeholder="{{ __('Management Skills') }}" value="{{ old('name', $row->name) }}" />
                                     </div>
                                     @if(empty($row->id))
                                     <div style="margin-top: 36px;">

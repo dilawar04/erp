@@ -73,9 +73,14 @@
                                     </select>
                                 </div>
                                 
-                               <div class="col-4" id="ntn">
+                                <div class="col-4" id="ntn">
                                     <label for="ntn" class="col-form-label required">{{ __('NTN') }}:</label>
                                     <input type="text" name="ntn" id="ntn" class="form-control" placeholder="{{ __('NTN') }}" value="{{ old('ntn', $row->ntn) }}"/>
+                                </div>
+
+                                <div class="col-4" id="sales_tax">
+                                    <label for="sales-tax" class="col-form-label required">{{ __('Sales Tax') }}:</label>
+                                    <input type="text" name="sales_tax" id="sales_tax" class="form-control" placeholder="{{ __('Sales Tax') }}" value="{{ old('sales_tax', $row->sales_tax) }}"/>
                                 </div>
         
                                 <div class="col-3">

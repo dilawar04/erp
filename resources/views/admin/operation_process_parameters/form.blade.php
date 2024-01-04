@@ -18,11 +18,11 @@
 
                         <div class="kt-portlet__body">
                             <div class="form-group row">
-                                <div class="col-lg-6">
+                                <div class="col-lg-3">
                                     <label for="product_id" class="col-form-label">{{ __('Product') }}:</label>
                                     <select name="product_id" id="product_id" class="form-control m-select2">
                                         <option value="">Select Product</option>
-                                        {{--{!! selectBox("SELECT id, name FROM products", old('product_id', $row->product_id)) !!}--}}
+                                        {!! selectBox("SELECT id, product_name FROM finished_product_profiles", old('product_id', $row->product_id)) !!}
                                     </select>
                                 </div>
                                 <div class="col-lg-3">
@@ -36,29 +36,15 @@
                                     <label for="operation_id" class="col-form-label">{{ __('Operation') }}:</label>
                                     <select name="operation_id" id="operation_id" class="form-control m-select2">
                                         <option value="">Select Operation</option>
-                                        {{--{!! selectBox("SELECT id, name FROM operations", old('operation_id', $row->operation_id)) !!}--}}
+                                        {!! selectBox("SELECT id, parameter FROM units", old('operation_id', $row->operation_id)) !!}
                                     </select>
                                 </div>
-                                <div class="col-lg-2">
+                                <div class="col-lg-3">
                                     <label for="type" class="col-form-label">{{ __('Type') }}:</label>
                                     <select name="type" id="type" class="form-control m-select2">
                                         <option value="">Select Type</option>
                                         {!! selectBox(DB_enumValues('operation_process_parameters', 'type'), old('type', $row->type)) !!}
                                     </select>
-                                </div>
-                              
-                                <div class="col-lg-4 worker-block">
-                                    <label for="weightage" class="col-form-label">{{ __('Weightage') }}:</label>
-                                    <select name="weightage" id="weightage" class="form-control m-select2" style="width: 100%">
-                                        {!! selectBox([1 => '1 - Helper Work',
-                                        2 => '2 - Low Skill Manual Work',
-                                        3 => '3 - Low Skill Machine Work',
-                                        4 => '4 - High Skill Manual Work',
-                                        5 => '5 - High Skill Machine Work',
-                                        ], old('weightage', $row->weightage)) !!}
-                                    </select>
-
-                                    {{--<input type="text" name="weightage" id="weightage" class="form-control" placeholder="{{ __('Weightage') }}" value="{{ old('weightage', $row->weightage) }}"/>--}}
                                 </div>
                             </div>
                             <div class="kt-separator kt-separator--border-dashed kt-separator--space-md"></div>
@@ -70,19 +56,28 @@
                             </div>
                             <div class="kt-separator kt-separator--border-dashed kt-separator--space-md"></div>
                             <div class="form-group row">
-                                <div class="col-lg-12">
+                                <div class="col-lg-3">
                                     <label for="parameter" class="col-form-label">{{ __('Parameter') }}:</label>
-                                    <input type="text" name="parameter" id="parameter" class="form-control" placeholder="{{ __('Parameter') }}" value="{{ old('parameter', $row->parameter) }}" />
+                                    <select name="parameter_id" id="parameter_id" class="form-control m-select2">
+                                        <option value="">Select Unit</option>
+                                        {!! selectBox("SELECT id, parameter FROM units", old('parameter_id', $row->parameter_id)) !!}
+                                    </select>                                </div>
+
+                                <div class="col-lg-3">
+                                    <label for="value" class="col-form-label">{{ __('Value') }}:</label> 
+                                    <input type="number" name="value" id="value" class="form-control" placeholder="{{ __('Value') }}" value="{{ old('value', $row->value) }}" />
                                 </div>
-                            </div>
-                            <div class="kt-separator kt-separator--border-dashed kt-separator--space-md"></div>
-                            <div class="form-group row">
-                                <div class="col-lg-6">
-                                    <label for="value" class="col-form-label">{{ __('Value') }}:</label> <input type="text" name="value" id="value" class="form-control" placeholder="{{ __('Value') }}" value="{{ old('value', $row->value) }}" />
-                                </div>
-                                <div class="col-lg-4">
+                                <div class="col-lg-3">
                                     <label for="tolerance" class="col-form-label">{{ __('Tolerance') }}:</label>
-                                    <input type="text" name="tolerance" id="tolerance" class="form-control" placeholder="{{ __('Tolerance') }}" value="{{ old('tolerance', $row->tolerance) }}" />
+                                    <input type="number" name="tolerance" id="tolerance" class="form-control" placeholder="{{ __('Tolerance') }}" value="{{ old('tolerance', $row->tolerance) }}" />
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <label for="unit_id" class="col-form-label">{{ __('Unit') }}:</label>
+                                    <select name="unit_id" id="unit_id" class="form-control m-select2">
+                                        <option value="">Select Unit</option>
+                                        {!! selectBox("SELECT id, parameter FROM units", old('unit_id', $row->unit_id)) !!}
+                                    </select>
                                 </div>
                                 
                             </div>

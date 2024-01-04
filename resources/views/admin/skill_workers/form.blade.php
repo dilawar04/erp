@@ -23,10 +23,6 @@
                         <div class="kt-portlet__body body_overtime" id="showovertime">
                             <div class="clone_container">
                                 <div class="from-group row mb-3 clone border p-3 bg-light">
-                                    <div class="col-lg-10">
-                                        <label for="name" class="col-form-label">{{ __('Skill Worker Name') }}:</label>
-                                        <input type="text" name="name[]" class="form-control name" placeholder="{{ __('Skill Worker Name') }}" value="{{ old('name', $row->name) }}" required/>
-                                    </div>
                                     <div class="col-lg-6">
                                         <label for="Workstation" class="col-form-label required">{{ __('Workstation') }}:</label>
                                         <select name="workstation_id[]" id="workstation" class="form-control -m-select2 w-100 workstation-selector" required>

@@ -64,7 +64,6 @@ class GenerateOemScheduleController extends Controller
 , generate_oem_schedules.oem_id
 -- , generate_oem_schedules.oem_id
 , generate_oem_schedules.type_of_worker
-, generate_oem_schedules.product
 , generate_oem_schedules.quantity
 , generate_oem_schedules.status
 , generate_oem_schedules.created_at
@@ -139,8 +138,7 @@ class GenerateOemScheduleController extends Controller
         $validator_rules = [
             'month' => "required",
             'quantity' => "required",
-            'year' => "required",
-            'product' => "required",
+            'year' => "required"
         ];
         $validator = \Validator::make(request()->all(), $validator_rules);
         if ($validator->fails()) {

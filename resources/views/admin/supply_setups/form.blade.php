@@ -98,17 +98,9 @@
                             
                             <div class="col-lg-4">
                                 <label for="enable-cycle_time" class="col-form-label required">{{ __('Enable Cycle Time') }}:</label>
-                                <select class="m-select2 w-100 multiple-form" name="enable_cycle_time">
+                                <select class="m-select2 w-100 multiple-form enable_cycle_time" name="enable_cycle_time">
                         	        <option value="" selected>-- Select --</option>
                                     {!! selectBox(DB_enumValues('supply_setups', 'enable_cycle_time'), old('enable_cycle_time', $row->enable_cycle_time)) !!}
-                                </select>
-                            </div>
-                            
-                            <div class="col-lg-4">
-                                <label for="enable-product-barcode" class="col-form-label required">{{ __('Enable Product Barcode') }}:</label>
-                                <select class="m-select2 w-100 multiple-form" name="enable_product_barcode">
-                        	        <option value="" selected>-- Select --</option>
-                                    {!! selectBox(DB_enumValues('supply_setups', 'enable_product_barcode'), old('enable_product_barcode', $row->enable_product_barcode)) !!}
                                 </select>
                             </div>
                             
@@ -145,7 +137,7 @@
                                         </div>
                                         <div class="col-lg-5">
                                             <label for="cycle_time" class="col-form-label">{{ __('Cycle Time') }}:</label>
-                                            <input type="text" name="cycle_time[]" class="form-control" placeholder="{{ __('Cycle Time') }}" value="{{ old('cycle_time.' . $index, $cycle_times[$index]) }}" />
+                                            <input type="time" name="cycle_time[]" class="form-control" placeholder="{{ __('Cycle Time') }}" value="{{ old('cycle_time.' . $index, $cycle_times[$index]) }}" />
                                         </div>
                                         <div style="margin-top: 36px;">
                                             <button type="button" class="btn btn-success btn-icon add-more"   clone-container=".clone_container_cycle" callback="add_more_cb_cycle"><i class="la la-plus"></i></button>
@@ -154,9 +146,18 @@
                                     </div>
                                 @endforeach
                              </div>
-                            
+
                             <div class="from-group row mb-3">
-                               <div class="col-lg-4">
+
+                                <div class="col-lg-4">
+                                    <label for="enable-product-barcode" class="col-form-label required">{{ __('Enable Product Barcode') }}:</label>
+                                    <select class="m-select2 w-100 multiple-form enable-barcode" name="enable_product_barcode">
+                                        <option value="" selected>-- Select --</option>
+                                        {!! selectBox(DB_enumValues('supply_setups', 'enable_product_barcode'), old('enable_product_barcode', $row->enable_product_barcode)) !!}
+                                    </select>
+                                </div>
+
+                               <div class="col-lg-4 enable-product-barcode">
                                     <label for="enable-product-barcode" class="col-form-label required">{{ __('Select Entities') }}:</label>
                                     <select class="m-select2 w-100 multiple-form" name="select_entities" id="select-entities">
                                         <option value="" selected>-- Select --</option>
@@ -172,7 +173,7 @@
                                     </select>
                                 </div>
                                 
-                                <div class="col-lg-4" style="margin-top:37px;">
+                                <div class="col-lg-4 enable-product-barcode" style="margin-top:37px;">
                                     <button type="button" class="btn btn-success add-more-entity" clone-container=".clone_container_entity" callback="add_more_cb_entity"><i class="la la-plus"></i>Add more</button>
                                 </div>
                                 
@@ -184,7 +185,7 @@
                                 @endphp
 
                                 @foreach($entity_names as $index => $entity_names)
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-6 enable-entity">
                                         <label for="entity_name" class="col-form-label">Entity No:<?php echo $i++; ?></label>
                                         <input type="text" name="entity_name[]" class="form-control" placeholder="entity_name"  value="{{ old('entity_name.' . $index, $entity_names) }}" readonly="">
                                         <button type="button" class="btn btn-danger delete-entity"><i class="la la-trash"></i>Delete</button>
@@ -211,7 +212,37 @@
     <!--end::Form-->
 @endsection {{-- Scripts --}} @section('scripts')
     <script>
+
         $(document).ready(function () {
+
+    		$('.enable-barcode').on('change', function(){
+    			var value = $(this).val(); 
+    			if(value == 'Yes'){
+                    
+        			$("div.enable-product-barcode").show();
+        			$("div.enable-entity").show();
+    			}
+    			else if(value == 'No'){
+                    $("div.enable-entity").hide();
+                    $("div.enable-product-barcode").hide();
+    			}
+    		});
+            $('.enable-barcode').trigger('change');
+
+
+            $('.enable_cycle_time').on('change', function(){
+    			var value = $(this).val(); 
+    			if(value == 'Yes With Barcode'){
+                    
+        			$("div.clone_container_cycle").show();
+    			}
+    			else if(value == 'No Without Barcode' || value == 'No'){
+                    $("div.clone_container_cycle").hide();
+    			}
+    		});
+            $('.enable_cycle_time').trigger('change');
+
+
             let addedValues = [];
         
             function updateColumnNumbers() {
