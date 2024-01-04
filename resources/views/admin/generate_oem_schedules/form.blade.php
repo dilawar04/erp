@@ -16,7 +16,6 @@
                             @include('admin.layouts.inc.portlet_head')
                             @include('admin.layouts.inc.portlet_actions')
                         </div>
-
                         <div class="kt-portlet__body">
                             <div class="form-group row">
                                <div class="col-lg-4">
@@ -29,7 +28,7 @@
                                     </div>
                                     <div class="col-lg-4">
                                     <label for="product" class="col-form-label required">{{ __('Product') }}:</label>
-                                        <select name="product_id" id="product_id" class="form-control m-select2">
+                                        <select name="product_id[]" id="product_id" class="form-control m-select2 w-100" multiple="multiple">
                                             <option value="">Select product</option>
                                             {!! selectBox("SELECT id, product_name FROM finished_product_profiles", old('product_id', $row->product_id)) !!}
                                         </select>                                    

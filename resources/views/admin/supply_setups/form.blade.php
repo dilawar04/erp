@@ -235,11 +235,9 @@
     			if(value == 'Yes With Barcode'){
                     
         			$("div.clone_container_cycle").show();
-        			// $("div.enable-entity").show();
     			}
     			else if(value == 'No Without Barcode' || value == 'No'){
                     $("div.clone_container_cycle").hide();
-                    // $("div.enable-product-barcode").hide();
     			}
     		});
             $('.enable_cycle_time').trigger('change');
